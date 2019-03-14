@@ -1,6 +1,6 @@
-package com.cwk.codec.impl;
+package com.game.codec.impl;
 
-import com.cwk.codec.ICodec;
+import com.game.codec.ICodec;
 
 import io.netty.buffer.ByteBuf;
 

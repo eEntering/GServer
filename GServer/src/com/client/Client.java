@@ -1,5 +1,8 @@
 package com.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -8,10 +11,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 
 public class Client {
+	private static Logger logger = LoggerFactory.getLogger(Client.class);
+	
 	public static void main(String[] args) {
 		String host = "127.0.0.1";
 		int port = 7979;
@@ -26,8 +29,6 @@ public class Client {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ch.pipeline()
-//					.addLast("stringEncoder",new StringEncoder())
-//					.addLast("StringDecoder", new StringDecoder())
 					.addLast(new ClientHandler());
 				}
 			});
@@ -35,8 +36,8 @@ public class Client {
 			ChannelFuture channelFuture = bootstrap.connect(host,port).sync();
 			channelFuture.channel().closeFuture().sync();
 		} catch (Exception e) {
-			System.out.println("客户端消息出错了");
-			System.out.println(e.getMessage());
+			logger.error("客户端消息出错了");
+			logger.error(e.getMessage());
 			worker.shutdownGracefully();
 		}
 	}

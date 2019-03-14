@@ -1,4 +1,4 @@
-package com.cwk.utils;
+package com.game.utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.cwk.codec.ICodec;
-import com.cwk.codec.impl.IntegerCodec;
-import com.cwk.codec.impl.ObjectCodec;
-import com.cwk.codec.impl.StringCodec;
-import com.test.mess.Message;
-import com.test.mess.TestMessage;
+import com.game.codec.ICodec;
+import com.game.codec.impl.IntegerCodec;
+import com.game.codec.impl.ObjectCodec;
+import com.game.codec.impl.StringCodec;
+import com.game.message.Message;
+import com.game.message.TestMessage;
 
 import io.netty.buffer.ByteBuf;
 

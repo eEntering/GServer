@@ -1,10 +1,10 @@
-package com.test.handler;
+package com.game.handler;
 
 import java.nio.charset.Charset;
 
-import com.cwk.codec.ICodec;
-import com.cwk.utils.Codec;
-import com.test.mess.TestMessage;
+import com.game.codec.ICodec;
+import com.game.message.TestMessage;
+import com.game.utils.Codec;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
@@ -19,12 +19,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 		final ByteBuf time = ctx.alloc().buffer(4);
 		
 		ByteBuf buf = ctx.alloc().buffer(1024);
-//		buf.writeCharSequence((CharSequence)"22222222", Charset.forName("UTF-8"));
-//		buf.writeInt(1);
-//		buf.writeLong(2);
-//		
-//		buf.
-//		buf.readInt();
 		
 		TestMessage message = new TestMessage();
 		message.setString("1234444");

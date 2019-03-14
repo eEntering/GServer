@@ -1,4 +1,4 @@
-package com.test.mess;
+package com.game.message;
 
 /** 测试消息 */
 @MessageID(ID = 1)

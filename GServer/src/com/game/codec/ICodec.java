@@ -1,4 +1,4 @@
-package com.cwk.codec;
+package com.game.codec;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

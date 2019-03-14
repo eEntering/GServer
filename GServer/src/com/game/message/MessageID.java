@@ -1,4 +1,4 @@
-package com.test.mess;
+package com.game.message;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

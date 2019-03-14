@@ -1,19 +1,20 @@
-package com.cwk.codec.impl;
+package com.game.codec.impl;
 
-import com.cwk.codec.ICodec;
+import com.game.codec.ICodec;
 
 import io.netty.buffer.ByteBuf;
 
-public class FloatCodec implements ICodec {
+public class LongCodec implements ICodec {
 
 	@Override
 	public Object read(ByteBuf in, Class<?> clazz) {
-		return in.readFloat();
+		return in.readLong();
 	}
 
 	@Override
 	public boolean write(ByteBuf in, Object value, Class<?> clazz) {
-		in.writeFloat((Float) value);
+		in.writeLong((Long) value);
 		return true;
 	}
+
 }

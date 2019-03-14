@@ -1,20 +1,19 @@
-package com.cwk.codec.impl;
+package com.game.codec.impl;
 
-import com.cwk.codec.ICodec;
+import com.game.codec.ICodec;
 
 import io.netty.buffer.ByteBuf;
 
-public class CharCodec implements ICodec {
+public class BoolCodec implements ICodec {
 
 	@Override
 	public Object read(ByteBuf in, Class<?> clazz) {
-		return in.readChar();
+		return in.readBoolean();
 	}
 
 	@Override
 	public boolean write(ByteBuf in, Object value, Class<?> clazz) {
-		in.writeChar((Character) value);
+		in.writeBoolean((Boolean) value);
 		return true;
 	}
-
 }

@@ -1,4 +1,4 @@
-package com.test.mess;
+package com.game.message;
 
 public class Message {
 

@@ -1,9 +1,9 @@
-package com.cwk.codec.impl;
+package com.game.codec.impl;
 
 import java.lang.reflect.Field;
 
-import com.cwk.codec.ICodec;
-import com.cwk.utils.Codec;
+import com.game.codec.ICodec;
+import com.game.utils.Codec;
 
 import io.netty.buffer.ByteBuf;
 
