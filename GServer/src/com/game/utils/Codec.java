@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.game.codec.ICodec;
 import com.game.codec.impl.IntegerCodec;
 import com.game.codec.impl.ObjectCodec;
@@ -17,18 +20,19 @@ import io.netty.buffer.ByteBuf;
 
 /**
  *  编解码器
- * @author 3461
+ * @author caiweikai
  */
 public class Codec {
 	
+	private static Logger LOGGER = LoggerFactory.getLogger(Codec.class);
+	
 	 private final static Class<?>[] parents = new Class<?>[] {Message.class};
-	 private final static String PACK = "com.test";
-	 private static Map<Integer, Class<?>> mess = new HashMap<>();
+	 private final static String PACK = "com.game.";
+	 private static Map<Integer, Class<?>> messageMap = new HashMap<>();
 	 private static Map<Class<?>, ICodec> allCodec = new HashMap<>();
 	 
 	 
 	 static {
-		 mess.put(1, TestMessage.class);
 		 
 		 allCodec.put(String.class, new StringCodec());
 		 allCodec.put(Integer.class, new IntegerCodec());
@@ -38,14 +42,32 @@ public class Codec {
 	
 	public static void init() {
 		List<Class<?>> classes = ClassUtil.scannerPack(PACK, new ClassFilterImpl(parents));
-		
-		
+		try {
+			for (Class<?> clazz : classes) {
+				if (Message.class.isAssignableFrom(clazz)) {
+					Message message = (Message) clazz.newInstance();
+					int mid = message.getMessageId();
+					Class<?> existClass = null;
+					if ((existClass = messageMap.put(mid, clazz)) != null) {
+						LOGGER.error("协议号重复！！！！！mid: {}, className: {} - {}", new Object[] { mid, clazz.getName(), existClass.getName() });
+						LOGGER.error("协议号重复！！！！！mid: {}, className: {} - {}", new Object[] { mid, clazz.getName(), existClass.getName() });
+						LOGGER.error("协议号重复！！！！！mid: {}, className: {} - {}", new Object[] { mid, clazz.getName(), existClass.getName() });
+						System.exit(0);
+					}
+					
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+		}
+		LOGGER.error("协议加载成功！！！！");
 	}
 	
 	public static void main(String[] args) {
 		
-		Class<?> clazz = mess.get(1);
-		encode(null, clazz);
+//		Class<?> clazz = mess.get(1);
+//		encode(null, clazz);
+		init();
 	}
 	
 	public static void encode(ByteBuf buf, Class<?> clazz) {
