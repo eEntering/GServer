@@ -6,8 +6,10 @@ import io.netty.buffer.ByteBuf;
 
 public class StringCodec implements ICodec {
 
+	private Class<?>[] bindClasses = new Class[] { String.class };
+	
 	@Override
-	public Object read(ByteBuf in, Class<?> clazz) {
+	public Object read(ByteBuf in, Class<?> clazz, Class<?> genericClass) {
 		int length = in.readInt();
 		byte[] bytes = new byte[length];
 		 in.readBytes(bytes) ;
@@ -16,12 +18,17 @@ public class StringCodec implements ICodec {
 	}
 
 	@Override
-	public boolean write(ByteBuf in, Object value, Class<?> clazz) {
+	public boolean write(ByteBuf in, Object value, Class<?> clazz, Class<?> genericClass) {
 		String string = (String) value;
 		byte[] bytes = string.getBytes();
 		in.writeInt(bytes.length);
 		in.writeBytes(bytes);
 		return true;
+	}
+
+	@Override
+	public Class<?>[] getBindClasses() {
+		return bindClasses;
 	}
 
 }

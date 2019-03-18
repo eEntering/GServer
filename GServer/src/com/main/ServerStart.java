@@ -12,6 +12,6 @@ public class ServerStart {
 	public static void main(String[] args) throws Exception {
 		logger.error("-------启动服务器------");
 		new HandlerServer().run();
-		System.out.println("------end-----");
+		logger.error("------end-----");
 	}
 }
