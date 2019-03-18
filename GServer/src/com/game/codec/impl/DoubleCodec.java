@@ -6,15 +6,22 @@ import io.netty.buffer.ByteBuf;
 
 public class DoubleCodec implements ICodec {
 
+	private Class<?>[] bindClasses = new Class[] { Double.class, double.class };
+	
 	@Override
-	public Object read(ByteBuf in, Class<?> clazz) {
+	public Object read(ByteBuf in, Class<?> clazz, Class<?> genericClass) {
 		return in.readDouble();
 	}
 
 	@Override
-	public boolean write(ByteBuf in, Object value, Class<?> clazz) {
+	public boolean write(ByteBuf in, Object value, Class<?> clazz, Class<?> genericClass) {
 		in.writeDouble((Double) value);
 		return true;
+	}
+
+	@Override
+	public Class<?>[] getBindClasses() {
+		return bindClasses;
 	}
 
 }

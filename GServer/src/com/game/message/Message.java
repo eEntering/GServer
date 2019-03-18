@@ -1,8 +1,8 @@
 package com.game.message;
 
-public class Message {
+public interface Message {
 
-	public int getMessageId() {
+	default int getMessageId() {
 		MessageID annotation = this.getClass().getAnnotation(MessageID.class);
 		if (annotation != null) {
 			return annotation.ID();

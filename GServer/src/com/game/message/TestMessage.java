@@ -2,7 +2,7 @@ package com.game.message;
 
 /** 测试消息 */
 @MessageID(ID = 1)
-public class TestMessage extends Message {
+public class TestMessage implements Message {
 
 	private int i;
 	private String string;
