@@ -8,7 +8,6 @@ import com.game.utils.Codec;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import io.netty.handler.codec.ByteToMessageCodec;
 
 /**
  * @author caiweikai

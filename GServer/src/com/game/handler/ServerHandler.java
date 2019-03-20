@@ -4,9 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.game.message.Message;
 import com.game.session.SessionManager;
+import com.game.socket.DispatchMessage;
 import com.game.utils.Codec;
-import com.game.utils.ContextUtil;
-import com.game.utils.LinkStatus;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -25,16 +24,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		// 解码
-		// 任务分发出去执行业务逻辑
 		ByteBuf buf = (ByteBuf) msg;
 		Message message = (Message) Codec.decode(buf);
 		if (message == null) {
 			logger.error("消息解码为空");
+			return;
 		}
-		LinkStatus linkStatus = ContextUtil.getLinkStatu(ctx.channel());
-//		ContextUtil.getAttributs(ctx.channel(), AttributeType.LINK_STATUS_KEY);
-		System.out.println(linkStatus == LinkStatus.ANONYMOUS);
-		SessionManager.getInst().write2Anonymous(message);
+		
+		// 任务分发出去执行业务逻辑
+		DispatchMessage.getInst().dispatch(ctx.channel(), message);
 	}
 	
 	@Override

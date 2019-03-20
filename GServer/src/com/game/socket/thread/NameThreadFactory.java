@@ -24,12 +24,18 @@ public class NameThreadFactory implements ThreadFactory {
 	
 	@Override
 	public Thread newThread(Runnable r) {
-		return new Thread(threadGroup, r, getThreadName());
+		return new Thread(threadGroup, r, getThreadName(), 0);
 	}
 	
 	public Thread newDaemoThread(Runnable r, boolean daemo) {
-		Thread thread = new Thread(threadGroup, r, getThreadName());
+		Thread thread = newThread(r);
 		thread.setDaemon(daemo);
+		return thread;
+	}
+	
+	public Thread newDaemoThread(Runnable r) {
+		Thread thread = newThread(r);
+		thread.setDaemon(true);
 		return thread;
 	}
 	

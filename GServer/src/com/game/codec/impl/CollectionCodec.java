@@ -47,6 +47,7 @@ public class CollectionCodec implements ICodec {
 		return collections;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean write(ByteBuf in, Object value, Class<?> clazz, Class<?> genericClass) {
 		if (value == null) {

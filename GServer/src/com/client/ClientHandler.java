@@ -36,23 +36,6 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 		
 		ByteBuf buf = (ByteBuf) msg;
 		Message message = (Message) Codec.decode(buf);
-//		ICodec codec = Codec.getCodec(Object.class);
-//		TestMessage message = (TestMessage) codec.read(buf, TestMessage.class,null);
-//		ByteBuf buf = (ByteBuf) msg;
-//		int i = buf.readInt();
-//		logger.error("解码消息:" + i);
-//		buf.writeInt(i+1);
-//		if (i>20) {
-//			return;
-//		}
-//		ctx.executor().execute(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				ctx.writeAndFlush(buf);
-//				logger.error("发送消息");
-//			}
-//		});
 	}
 
 	@Override

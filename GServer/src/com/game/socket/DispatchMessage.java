@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.game.message.Message;
+import com.game.message.MessageIds;
 import com.game.message.annotation.MessageHandler;
 import com.game.message.annotation.MessageID;
 import com.game.message.annotation.MessageMethod;
@@ -38,6 +39,14 @@ public class DispatchMessage {
 	/** handle的实例对象 */
 	private final static Map<Class<?>, Object> HANDLE_OBJECT = new HashMap<>();
 	
+	public boolean isLogin(int mid) {
+		switch (mid) {
+		case MessageIds.reqLogin:
+			return true;
+		}
+		return false;
+	}
+	
 	/** 分发消息 */
 	public void dispatch(Channel channel, Message message) {
 		LinkStatus linkStatus = ContextUtil.getLinkStatu(channel);
@@ -56,9 +65,20 @@ public class DispatchMessage {
 		}
 		
 		try {
+			Object handle = HANDLE_OBJECT.get(messageAssist.getHandleClass());
+			if (handle == null) {
+				LOGGER.error("找不到handk实例对象：" + messageAssist.getHandleClass().getName());
+				return;
+			}
 			Object[] params = paramCovert.convertParam(channel, messageAssist.getParamClass(), message);
-			
-			
+
+			MessageTask task = MessageTask.valueOf(gameDispatch.dispatchLine(), gameDispatch.dispatchMap(), handle,
+					messageAssist.getMethod(), params, message);
+			if (isLogin(message.getMessageId())) {
+				HandleContext.getInst().addTask(task);
+			} else {
+				channel.eventLoop().execute(task);
+			}
 			
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());

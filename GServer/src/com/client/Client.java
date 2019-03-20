@@ -41,7 +41,7 @@ public class Client {
 					ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
 					channelFuture.channel().closeFuture().sync();
 				} catch (Exception e) {
-					logger.error("客户端消息出错了");
+					logger.error("客户端启动出错了");
 					logger.error(e.getMessage());
 					worker.shutdownGracefully();
 				}
