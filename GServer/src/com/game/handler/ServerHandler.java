@@ -33,6 +33,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 		}
 		LinkStatus linkStatus = ContextUtil.getLinkStatu(ctx.channel());
 //		ContextUtil.getAttributs(ctx.channel(), AttributeType.LINK_STATUS_KEY);
+		System.out.println(linkStatus == LinkStatus.ANONYMOUS);
 		SessionManager.getInst().write2Anonymous(message);
 	}
 	

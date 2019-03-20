@@ -68,6 +68,13 @@ public class Codec {
 		LOGGER.error("协议加载完成！！！！");
 	}
 
+	public static void main(String[] args) {
+
+//		Class<?> clazz = mess.get(1);
+//		encode(null, clazz);
+		init();
+	}
+
 	public static Class<?> getGenericClass(Field field) {
 		try {
 			Class<?> clazz = field.getType();

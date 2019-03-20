@@ -36,7 +36,6 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 		
 		ByteBuf buf = (ByteBuf) msg;
 		Message message = (Message) Codec.decode(buf);
-		System.out.println(message);
 //		ICodec codec = Codec.getCodec(Object.class);
 //		TestMessage message = (TestMessage) codec.read(buf, TestMessage.class,null);
 //		ByteBuf buf = (ByteBuf) msg;
