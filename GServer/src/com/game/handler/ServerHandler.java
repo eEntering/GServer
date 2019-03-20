@@ -1,18 +1,13 @@
 package com.game.handler;
 
-import java.nio.charset.Charset;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.game.codec.ICodec;
 import com.game.message.Message;
-import com.game.message.TestMessage;
+import com.game.session.SessionManager;
 import com.game.utils.Codec;
-
+import com.game.utils.ContextUtil;
+import com.game.utils.LinkStatus;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -23,33 +18,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		
-		logger.error("建立连接");
-//		final ByteBuf time = ctx.alloc().buffer(4);
-//		time.writeInt(1);
-//		ctx.executor().execute(new Runnable() {
-//			@Override
-//			public void run() {
-//				ctx.writeAndFlush(time);
-//				logger.error("发送消息");
-//			}
-//		});
-//		ByteBuf buf = ctx.alloc().buffer(1024);
-		
-//		TestMessage message = new TestMessage();
-//		message.setString("1234444");
-//		message.setI(58);
-//		ICodec codec = Codec.getCodec(Object.class);
-//		codec.write(buf, message, message.getClass(),null);
-		
-//		final ChannelFuture channelFuture = ctx.writeAndFlush(buf);
-//		channelFuture.addListener(new ChannelFutureListener() {
-//			@Override
-//			public void operationComplete(ChannelFuture future) {
-//				assert channelFuture == future;
-//				System.out.println("消息发送了");
-//				ctx.close();
-//			}
-//		});
+		logger.error("channel active : [{}]  timestamp : [{}]", new Object[] { ctx, System.currentTimeMillis() });
+		SessionManager.getInst().putAnonymous(ctx.channel());
 	}
 	
 	@Override
@@ -61,25 +31,20 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 		if (message == null) {
 			logger.error("消息解码为空");
 		}
-		System.out.println(message);
-//		int i = buf.readInt();
-//		logger.error("解码消息:" + i);
-//		buf.writeInt(i+1);
-//		ctx.executor().execute(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				ctx.writeAndFlush(buf);
-//				logger.error("发送消息");
-//			}
-//		});
+		LinkStatus linkStatus = ContextUtil.getLinkStatu(ctx.channel());
+//		ContextUtil.getAttributs(ctx.channel(), AttributeType.LINK_STATUS_KEY);
+		SessionManager.getInst().write2Anonymous(message);
+	}
+	
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		SessionManager.getInst().removeAnonymous(ctx.channel().id().asLongText());
+		logger.error("channel Inactive : [{}]  timestamp : [{}]", new Object[] { ctx, System.currentTimeMillis() });
 	}
 	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		super.exceptionCaught(ctx, cause);
 		System.out.println("出现问题！！！！！");
-		System.out.println(cause.getMessage());
 	}
 	
 	@Override

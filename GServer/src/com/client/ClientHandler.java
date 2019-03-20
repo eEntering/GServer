@@ -3,10 +3,8 @@ package com.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game.codec.ICodec;
-import com.game.message.TestMessage;
-import com.game.player.message.ReqTestMessage;
-import com.game.player.message.TestBean;
+import com.game.message.Message;
+import com.game.player.message.ReqLoginMessage;
 import com.game.utils.Codec;
 
 import io.netty.buffer.ByteBuf;
@@ -20,13 +18,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		logger.error("建立连接");
 		final ByteBuf buf = ctx.alloc().buffer(1024);
-		ReqTestMessage message = new ReqTestMessage();
-		message.setId(9999);
-		message.setName("cwk");
-		TestBean bean = new TestBean();
-		bean.setLevle(12);
-		bean.setName("ff");
-		message.getBeans().add(bean);
+		ReqLoginMessage message = new ReqLoginMessage();
 		Codec.encode(buf, message);
 		
 		ctx.executor().execute(new Runnable() {
@@ -41,8 +33,11 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		
+		ByteBuf buf = (ByteBuf) msg;
+		Message message = (Message) Codec.decode(buf);
+		System.out.println(message);
 //		ICodec codec = Codec.getCodec(Object.class);
-//		ByteBuf buf = (ByteBuf) msg;
 //		TestMessage message = (TestMessage) codec.read(buf, TestMessage.class,null);
 //		ByteBuf buf = (ByteBuf) msg;
 //		int i = buf.readInt();

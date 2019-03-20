@@ -14,6 +14,7 @@ import io.netty.buffer.ByteBuf;
 
 public class CollectionCodec implements ICodec {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object read(ByteBuf in, Class<?> clazz, Class<?> genericClass) {
 		short length = in.readShort();
@@ -46,6 +47,7 @@ public class CollectionCodec implements ICodec {
 		return collections;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean write(ByteBuf in, Object value, Class<?> clazz, Class<?> genericClass) {
 		if (value == null) {

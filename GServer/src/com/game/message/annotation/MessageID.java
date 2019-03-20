@@ -1,4 +1,4 @@
-package com.game.message;
+package com.game.message.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -14,4 +14,5 @@ public @interface MessageID {
 	
 	/** 协议号 */
 	int ID();
+	
 }

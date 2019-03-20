@@ -9,5 +9,8 @@ package com.game.message;
  * @date 2019年3月18日
  */
 public interface MessageIds {
-	int TEST = 3;
+	/** 請求登陸 */
+	int reqLogin = 100000001;
+	
+	
 }

@@ -2,7 +2,6 @@ package com.game.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -13,11 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.game.codec.ICodec;
 import com.game.codec.impl.CollectionCodec;
-import com.game.codec.impl.IntegerCodec;
 import com.game.codec.impl.ObjectCodec;
-import com.game.codec.impl.StringCodec;
 import com.game.message.Message;
-import com.game.message.TestMessage;
 
 import io.netty.buffer.ByteBuf;
 
@@ -28,24 +24,15 @@ import io.netty.buffer.ByteBuf;
 public class Codec {
 	
 	private static Logger LOGGER = LoggerFactory.getLogger(Codec.class);
-	
-	 private final static Class<?>[] parents = new Class<?>[] {Message.class,ICodec.class};
-	 private final static String PACK = "com.game.";
-	 private static Map<Integer, Class<?>> messageMap = new HashMap<>();
-	 /** 基本数据类型及其包装类型的编解码器，还有协议的  */
-	 private static Map<Class<?>, ICodec> singleCodec = new HashMap<>();
-	 /** 列表和数组的编解码器 */
-	 private static Map<Class<?>, ICodec> multiCodec = new HashMap<>();
+
+	private final static Class<?>[] parents = new Class<?>[] { Message.class, ICodec.class };
+	private final static String PACK = "com.game.";
+	private static Map<Integer, Class<?>> messageMap = new HashMap<>();
+	/** 基本数据类型及其包装类型的编解码器，还有协议的 */
+	private static Map<Class<?>, ICodec> singleCodec = new HashMap<>();
+	/** 列表和数组的编解码器 */
+	private static Map<Class<?>, ICodec> multiCodec = new HashMap<>();
 	 
-	 
-	 static {
-		 
-//		 allCodec.put(String.class, new StringCodec());
-//		 allCodec.put(Integer.class, new IntegerCodec());
-//		 allCodec.put(int.class, new IntegerCodec());
-//		 allCodec.put(Object.class, new ObjectCodec());
-	 }
-	
 	public static void init() {
 		List<Class<?>> classes = ClassUtil.scannerPack(PACK, new ClassFilterImpl(parents));
 		try {
@@ -63,11 +50,10 @@ public class Codec {
 								new Object[] { mid, clazz.getName(), existClass.getName() });
 						System.exit(0);
 					}
-					
+
 					ICodec codec = getCodec(clazz);
 					if (codec == null) {
-						LOGGER.error("协议找不到编解码器！！！！！mid: {}, className: {} ",
-								new Object[] { mid, clazz.getName() });
+						LOGGER.error("协议找不到编解码器！！！！！mid: {}, className: {} ", new Object[] { mid, clazz.getName() });
 						System.exit(0);
 					}
 					LOGGER.error("注册编解码器,mid:{}, {} ", new Object[] { mid, clazz.getName() });
@@ -81,14 +67,7 @@ public class Codec {
 		}
 		LOGGER.error("协议加载完成！！！！");
 	}
-	
-	public static void main(String[] args) {
-		
-//		Class<?> clazz = mess.get(1);
-//		encode(null, clazz);
-		init();
-	}
-	
+
 	public static Class<?> getGenericClass(Field field) {
 		try {
 			Class<?> clazz = field.getType();
@@ -102,7 +81,7 @@ public class Codec {
 		}
 		return null;
 	}
-	
+
 	/** 编码成二进制 */
 	public static void encode(ByteBuf buf, Object object) {
 		Class<?> clazz = object.getClass();
@@ -132,6 +111,7 @@ public class Codec {
 	public static Object decode(ByteBuf buf) {
 		Object object = null;
 		try {
+			@SuppressWarnings("unused")
 			byte i = buf.readByte(); // 占位符
 
 			int mid = buf.readInt();
@@ -153,8 +133,7 @@ public class Codec {
 
 		return object;
 	}
-	
-	
+
 	public static ICodec getCodec(Class<?> clazz) {
 		ICodec codec = singleCodec.get(clazz);
 		if (codec != null) {
@@ -177,7 +156,7 @@ public class Codec {
 				objectCodec.getGenericClasses().add(gnericClass);
 			}
 			singleCodec.put(clazz, objectCodec);
-			
+
 			return objectCodec;
 		}
 	}

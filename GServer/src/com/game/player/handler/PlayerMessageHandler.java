@@ -1,10 +1,10 @@
-/**
- * 
- */
 package com.game.player.handler;
 
-import com.game.message.MessageHandler;
-import com.game.player.message.ReqTestMessage;
+import com.game.message.annotation.MessageHandler;
+import com.game.message.annotation.MessageMethod;
+import com.game.player.message.ReqLoginMessage;
+
+import io.netty.channel.Channel;
 
 /**
  * @author caiweikai
@@ -13,9 +13,10 @@ import com.game.player.message.ReqTestMessage;
 @MessageHandler
 public class PlayerMessageHandler {
 	
-	/** 测试 */
-	public void test(long playerId,ReqTestMessage req) {
-		
+	/** 请求登陆 */
+	@MessageMethod(anoymous = true)
+	public void reqLogin(Channel channel, ReqLoginMessage req) {
+		System.out.println("请求登陆11111");
 	}
 
 }

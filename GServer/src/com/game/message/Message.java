@@ -1,5 +1,7 @@
 package com.game.message;
 
+import com.game.message.annotation.MessageID;
+
 public interface Message {
 
 	default int getMessageId() {
