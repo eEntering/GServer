@@ -2,6 +2,7 @@ package com.game.socket;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.DelayQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
@@ -47,12 +48,12 @@ public class HandleContext {
 	}
 	
 	private void init() {
-//		for (int i = 0; i < loginWorker.length; i++) {
-//			WorkerThread thread = new WorkerThread(i);
-//			loginWorker[i] = thread;
-//			new NameThreadFactory("loginWorker").newDaemoThread(thread).start();
-//		}
-//		
+		for (int i = 0; i < loginWorker.length; i++) {
+			WorkerThread thread = new WorkerThread(i);
+			loginWorker[i] = thread;
+			new NameThreadFactory("loginWorker").newDaemoThread(thread).start();
+		}
+		
 		for (int i = 0; i < noLoginWorker.length; i++) {
 			WorkerThread thread = new WorkerThread(i);
 			noLoginWorker[i] = thread;
@@ -63,7 +64,8 @@ public class HandleContext {
 	/** 工作线程 */
 	private class WorkerThread implements Runnable {
 
-		private ConcurrentLinkedQueue<BaseTask> taskQuene = new ConcurrentLinkedQueue<>();
+		/** 阻塞队列,take数据时会一直阻塞到取到数据 */
+		private DelayQueue<BaseTask> taskQuene = new DelayQueue<>();
 		/** 线程索引 */
 		private int threadIndex;
 		
@@ -75,11 +77,12 @@ public class HandleContext {
 		public void run() {
 			try {
 				while (true) {
-					BaseTask task = taskQuene.poll();
+					// 从队首取元素，如果队列为空，则等待
+					BaseTask task = taskQuene.take();
 					if (task != null) {
 						task.runTask();
 					}
-
+					
 					// 定时任务需要继续添加进队列
 				}
 			} catch (Exception e) {
@@ -110,7 +113,8 @@ public class HandleContext {
 				logger.error("获取不到工作线程！！！" + task.getDispatchId());
 				return;
 			}
-
+			
+			thread.addTask(task);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}

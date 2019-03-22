@@ -74,12 +74,7 @@ public class DispatchMessage {
 
 			MessageTask task = MessageTask.valueOf(gameDispatch.dispatchLine(), gameDispatch.dispatchMap(), handle,
 					messageAssist.getMethod(), params, message);
-			if (isLogin(message.getMessageId())) {
-				HandleContext.getInst().addTask(task);
-			} else {
-				channel.eventLoop().execute(task);
-			}
-			
+			HandleContext.getInst().addTask(task);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 		}
