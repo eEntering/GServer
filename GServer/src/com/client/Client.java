@@ -3,6 +3,8 @@ package com.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.game.utils.Codec;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -20,7 +22,7 @@ public class Client {
 		final int port = 7979;
 		
 		// 加载必要数据
-		
+		Codec.init();
 		
 		Thread thread = new Thread(new Runnable() {
 			@Override

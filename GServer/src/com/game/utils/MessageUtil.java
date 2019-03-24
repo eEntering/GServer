@@ -16,9 +16,12 @@ public class MessageUtil {
 	}
 	
 	public static void notifyAllAnonymous(Message message) {
-//		SessionManager.getInst().
-//		for(Channel channel : SessionManager.getInst().allAnonymousSessions()) {
-////			channel.writeAndFlush(msg)
-//		}
+		for (Channel channel : SessionManager.getInst().allAnonymousSessions()) {
+			SessionManager.getInst().write(channel, message);
+		}
+	}
+	
+	public static void notifyChannel(Channel channel, Message message) {
+		SessionManager.getInst().write(channel, message);
 	}
 }

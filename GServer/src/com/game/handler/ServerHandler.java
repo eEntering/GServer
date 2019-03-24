@@ -1,8 +1,11 @@
 package com.game.handler;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.game.message.Message;
+import com.game.player.message.ResLoginMessage;
 import com.game.session.SessionManager;
 import com.game.socket.DispatchMessage;
 import com.game.utils.Codec;
@@ -13,6 +16,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
 	private final static Logger logger = LoggerFactory.getLogger(ServerHandler.class);
+	private AtomicInteger atomic = new AtomicInteger();
+	private long curr = System.currentTimeMillis();
+	
 	
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -30,9 +36,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 			logger.error("消息解码为空");
 			return;
 		}
-		
 		// 任务分发出去执行业务逻辑
 		DispatchMessage.getInst().dispatch(ctx.channel(), message);
+		int a = atomic.incrementAndGet();
+		if (a % 100 == 0) {
+			long now = System.currentTimeMillis();
+			System.out.println("===============" + a + "============" + (now - curr));
+			curr = now;
+		}
 	}
 	
 	@Override

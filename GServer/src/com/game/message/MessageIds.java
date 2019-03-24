@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.game.message;
 
 /**
@@ -10,7 +7,8 @@ package com.game.message;
  */
 public interface MessageIds {
 	/** 請求登陸 */
-	int reqLogin = 100000001;
-	
+	int reqLogin = 10000001;
+	/** 返回登陆 */
+	int resLgin = 10000101;
 	
 }
