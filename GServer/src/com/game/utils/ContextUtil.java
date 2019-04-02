@@ -71,4 +71,12 @@ public class ContextUtil {
 		Long playerId = getAttribute(channel, AttributeType.PLAYER_ID_KEY, Long.class);
 		return playerId == null ? 0 : playerId;
 	}
+	
+	public static long getUserId(Channel channel) {
+		if (channel == null) {
+			return 0;
+		}
+		Long userId = getAttribute(channel, AttributeType.USER_ID_KEY, Long.class);
+		return userId == null ? 0 : userId;
+	}
 }

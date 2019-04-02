@@ -167,4 +167,8 @@ public class Codec {
 			return objectCodec;
 		}
 	}
+	
+	public static Map<Integer, Class<?>> getMessageMap() {
+		return messageMap;
+	}
 }

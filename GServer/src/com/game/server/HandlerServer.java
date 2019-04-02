@@ -3,15 +3,13 @@ package com.game.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game.handler.ServerHandler;
+import com.game.server.socket.WebSocketChildHandler;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class HandlerServer {
@@ -19,7 +17,7 @@ public class HandlerServer {
 	private final static Logger LOGGER = LoggerFactory.getLogger(HandlerServer.class);
 	
 	private final int port = 7979;
-	private final static ServerHandler SERVER_HANDLER = new ServerHandler();
+	
 
 	public void run(){
 		
@@ -33,12 +31,10 @@ public class HandlerServer {
 					bootstrap.group(boss, worker)
 
 							.channel(NioServerSocketChannel.class)
-							.childHandler(new ChannelInitializer<SocketChannel>() {
-								@Override
-								protected void initChannel(SocketChannel ch) throws Exception {
-									ch.pipeline().addLast("server", SERVER_HANDLER);
-								}
-							}).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
+//							.childHandler(new ServerChildHandler())
+							.childHandler(new WebSocketChildHandler())
+							.option(ChannelOption.SO_BACKLOG, 128)
+							.childOption(ChannelOption.SO_KEEPALIVE, true);
 
 					ChannelFuture future = bootstrap.bind(port).sync();
 					if (future.isSuccess()) {

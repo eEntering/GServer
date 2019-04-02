@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.game.message.Message;
 import com.game.player.message.ReqLoginMessage;
+import com.game.player.message.ReqPlayerInfoMessage;
 import com.game.player.message.ResLoginMessage;
 import com.game.utils.Codec;
 
@@ -25,8 +26,8 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 	private final static Logger logger = LoggerFactory.getLogger(ClientHandler.class);
 	private static Random random = new Random();
 	private static String pass = UUID.randomUUID().toString();
-	private static long user = random.nextLong();
-	
+//	private static long user = random.nextLong();
+	private static long user = 1;
 	private AtomicInteger atomic = new AtomicInteger();
 	private long curr = System.currentTimeMillis();
 	
@@ -75,11 +76,11 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 //			System.out.println("收到返回消息：： "+((ResLoginMessage) message).getNotice());
 		}
 		final ByteBuf sbuf = ctx.alloc().buffer(1024);
-		ReqLoginMessage smessage = new ReqLoginMessage();
-		smessage.setUserId(user);
-		smessage.setPass(pass);
+		ReqPlayerInfoMessage smessage = new ReqPlayerInfoMessage();
+//		smessage.setUserId(user);
+//		smessage.setPass(pass);
 		Codec.encode(sbuf, smessage);
-		ChannelFuture future = ctx.writeAndFlush(sbuf);
+//		ChannelFuture future = ctx.writeAndFlush(sbuf);
 		
 		int a = atomic.incrementAndGet();
 		if (a % 100 == 0) {
@@ -87,6 +88,11 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 			System.out.println("===============" + a + "============" + (now - curr));
 			curr = now;
 		}
+	}
+	
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		logger.error("断开连接");
 	}
 
 	@Override

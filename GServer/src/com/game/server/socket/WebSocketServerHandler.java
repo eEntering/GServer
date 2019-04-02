@@ -1,21 +1,35 @@
-package com.game.handler;
+package com.game.server.socket;
 
+import java.time.LocalDateTime;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.game.handler.ServerHandler;
 import com.game.message.Message;
+import com.game.player.bean.PlayerInfoBean;
 import com.game.player.message.ResLoginMessage;
 import com.game.session.SessionManager;
 import com.game.socket.DispatchMessage;
 import com.game.socket.constant.ChannelCloseType;
 import com.game.utils.Codec;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 
-public class ServerHandler extends ChannelInboundHandlerAdapter {
-
+/**
+ * @author caiweikai
+ * @date 2019年4月2日
+ */
+public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
+	
 	private final static Logger logger = LoggerFactory.getLogger(ServerHandler.class);
 	private AtomicInteger atomic = new AtomicInteger();
 	private long curr = System.currentTimeMillis();
@@ -30,20 +44,30 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		// 解码
-		ByteBuf buf = (ByteBuf) msg;
-		Message message = (Message) Codec.decode(buf);
-		if (message == null) {
-			logger.error("消息解码为空");
-			return;
-		}
-		// 任务分发出去执行业务逻辑
-		DispatchMessage.getInst().dispatch(ctx.channel(), message);
-		int a = atomic.incrementAndGet();
-		if (a % 100 == 0) {
-			long now = System.currentTimeMillis();
-			System.out.println("===============" + a + "============" + (now - curr));
-			curr = now;
+		// 传输json
+//		ResLoginMessage message = new ResLoginMessage();
+//		message.setNotice("123");
+//		PlayerInfoBean playerInfoBean = new PlayerInfoBean();
+//		playerInfoBean.setName("护法u");
+//		playerInfoBean.setPlayerId(15151151L);
+//		message.getPlyers().add(playerInfoBean);
+//		String json = JSON.toJSON(message).toString();
+//		System.out.println(json);
+//		ctx.channel().writeAndFlush(new TextWebSocketFrame(json));
+		
+		
+		WebSocketFrame frame = (WebSocketFrame) msg;
+		System.out.println(((TextWebSocketFrame) frame).text());
+		String text = ((TextWebSocketFrame) frame).text();
+		JSONObject object = (JSONObject) JSON.parse(((TextWebSocketFrame) frame).text());
+		String mid = String.valueOf(object.get("messageId"));
+		int midInt = Integer.parseInt(mid);
+		Class<?> messageClass = Codec.getMessageMap().get(midInt);
+
+		if (messageClass != null) {
+			Message aObject = (Message) JSON.parseObject(text, messageClass);
+			DispatchMessage.getInst().dispatch(ctx.channel(), aObject);
+
 		}
 	}
 	
@@ -56,7 +80,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-//		System.out.println("出现问题！！！！！");
 		cause.printStackTrace();
 		ctx.close();
 	}

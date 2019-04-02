@@ -1,6 +1,8 @@
 package com.game.utils;
 
 import com.game.message.Message;
+import com.game.player.message.ResPlayerInfoMessage;
+import com.game.player.struts.Player;
 import com.game.session.SessionManager;
 
 import io.netty.channel.Channel;
@@ -23,5 +25,9 @@ public class MessageUtil {
 	
 	public static void notifyChannel(Channel channel, Message message) {
 		SessionManager.getInst().write(channel, message);
+	}
+
+	public static void notifyPlayer(Player player, Message message) {
+		SessionManager.getInst().write(player.getUserId(), message);
 	}
 }

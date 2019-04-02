@@ -21,9 +21,9 @@ public class DefaultParamCovert implements IParamCovert {
 			if (Channel.class.isAssignableFrom(paramClazz)) {
 				params[i] = channel;
 			} else if (long.class.isAssignableFrom(paramClazz)) {
-				params[i] = ContextUtil.getPlayerId(channel);
+				params[i] = ContextUtil.getUserId(channel);
 			} else if (Long.class.isAssignableFrom(paramClazz)) {
-				params[i] = ContextUtil.getPlayerId(channel);
+				params[i] = ContextUtil.getUserId(channel);
 			} else if (Message.class.isAssignableFrom(paramClazz)) {
 				params[i] = message;
 			}

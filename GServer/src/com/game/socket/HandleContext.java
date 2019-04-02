@@ -28,7 +28,7 @@ public class HandleContext {
 	/** 未登录工作线程数量 */
 	private final int NO_LOGON_CORE_SIZE =  2;
 	/** 登陆线程 */
-	private ExecutorService LOGIN_EXECUTOR = Executors.newFixedThreadPool(CORE, new NameThreadFactory("login"));
+	private ExecutorService LOGIN_EXECUTOR = Executors.newFixedThreadPool(2, new NameThreadFactory("login"));
 	private WorkerThread[] loginWorker = new WorkerThread[CORE_SIZE];
 	private WorkerThread[] noLoginWorker = new WorkerThread[NO_LOGON_CORE_SIZE];
 	private AtomicLong noLoginCount = new AtomicLong(0);
@@ -42,7 +42,7 @@ public class HandleContext {
 				return inst;
 			}
 			inst = new HandleContext();
-//			inst.init();
+			inst.init();
 		}
 		return inst;
 	}

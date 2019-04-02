@@ -60,14 +60,14 @@ public class DispatchMessage {
 		}
 
 		if (linkStatus == LinkStatus.ANONYMOUS && !messageAssist.isAnonymous()) {
-			LOGGER.error("channel ip {} , 发送消息 mid: {} ,不存在！！！！", new Object[] { ContextUtil.getRemoteIp(channel), mid });
+			LOGGER.error("channel ip {} , 发送消息 mid: {} ,消息为不可匿名访问！！！！", new Object[] { ContextUtil.getRemoteIp(channel), mid });
 			return;
 		}
 		
 		try {
 			Object handle = HANDLE_OBJECT.get(messageAssist.getHandleClass());
 			if (handle == null) {
-				LOGGER.error("找不到handk实例对象：" + messageAssist.getHandleClass().getName());
+				LOGGER.error("找不到handle实例对象：" + messageAssist.getHandleClass().getName());
 				return;
 			}
 			Object[] params = paramCovert.convertParam(channel, messageAssist.getParamClass(), message);

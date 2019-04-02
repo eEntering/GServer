@@ -21,5 +21,7 @@ public interface AttributeType {
 	
 	/** 玩家id */
 	AttributeKey<Long> PLAYER_ID_KEY = AttributeKey.valueOf("PLAYER_ID_KEY");
+	/** 用户id */
+	AttributeKey<Long> USER_ID_KEY = AttributeKey.valueOf("USER_ID_KEY");
 	
 }

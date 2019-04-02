@@ -7,6 +7,9 @@ package com.game.utils;
 public class DispatchUtil {
 
 	public static int getDispatchId(int line, int map) {
-		return line * 10000000 + map;
+		if (map == 0) {
+			return line;
+		}
+		return map * 10000000 + line;
 	}
 }
