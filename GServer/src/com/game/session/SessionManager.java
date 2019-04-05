@@ -20,6 +20,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 
 /**
  * @author caiweikai
@@ -137,7 +138,11 @@ public class SessionManager {
 		if (channel != null && channel.isActive() && channel.isOpen()) {
 			ByteBuf buf = channel.alloc().buffer();
 			Codec.encode(buf, message);
-			channel.writeAndFlush(buf);
+			// 直接发送二进制消息
+			// channel.writeAndFlush(buf);
+			// 转成websocket消息发送
+			BinaryWebSocketFrame binaryWebSocketFrame = new BinaryWebSocketFrame(buf);
+			channel.writeAndFlush(binaryWebSocketFrame);
 		}
 	}
 

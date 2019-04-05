@@ -22,7 +22,7 @@ public class PlayerMessageHandler {
 	@MessageMethod(anoymous = true)
 	public void reqLogin(Channel channel, ReqLoginMessage req) {
 		String notice = req.getUserId() + "(" + req.getPass() + "), 你好！";
-//		System.out.println(notice);
+		System.out.println(notice);
 		PlayerManager.getInst().login(channel, req.getUserId(), req.getPass());
 		ResLoginMessage message = new ResLoginMessage();
 		message.setNotice(notice);

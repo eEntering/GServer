@@ -21,6 +21,7 @@ import com.game.utils.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 
@@ -54,20 +55,10 @@ public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
 //		String json = JSON.toJSON(message).toString();
 //		System.out.println(json);
 //		ctx.channel().writeAndFlush(new TextWebSocketFrame(json));
-		
-		
-		WebSocketFrame frame = (WebSocketFrame) msg;
-		System.out.println(((TextWebSocketFrame) frame).text());
-		String text = ((TextWebSocketFrame) frame).text();
-		JSONObject object = (JSONObject) JSON.parse(((TextWebSocketFrame) frame).text());
-		String mid = String.valueOf(object.get("messageId"));
-		int midInt = Integer.parseInt(mid);
-		Class<?> messageClass = Codec.getMessageMap().get(midInt);
-
-		if (messageClass != null) {
-			Message aObject = (Message) JSON.parseObject(text, messageClass);
-			DispatchMessage.getInst().dispatch(ctx.channel(), aObject);
-
+		try {
+			WebShocketFrameHandle.handleMsg(ctx.channel(), msg);
+		} catch (Exception e) {
+			logger.error("处理WebSocket消息出错！！！");
 		}
 	}
 	
