@@ -2,6 +2,7 @@ package com.game.player.handler;
 
 import com.game.message.annotation.MessageHandler;
 import com.game.message.annotation.MessageMethod;
+import com.game.player.bean.PlayerInfoBean;
 import com.game.player.manager.PlayerManager;
 import com.game.player.message.ReqLoginMessage;
 import com.game.player.message.ReqPlayerInfoMessage;
@@ -26,9 +27,13 @@ public class PlayerMessageHandler {
 		PlayerManager.getInst().login(channel, req.getUserId(), req.getPass());
 		ResLoginMessage message = new ResLoginMessage();
 		message.setNotice(notice);
+		PlayerInfoBean playerInfoBean = new PlayerInfoBean();
+		playerInfoBean.setName(req.getPass());
+		playerInfoBean.setPlayerId(req.getUserId());
+		message.getPlyers().add(playerInfoBean);
 		MessageUtil.notifyChannel(channel, message);
 	}
-	
+
 	@MessageMethod
 	public void reqPlayerInfo(long userId, ReqPlayerInfoMessage req) {
 		Player player = PlayerManager.getInst().getOnlinePlayer(userId);
